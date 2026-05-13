@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>ドン・キホーテ デジタル採寸サイネージ — 実機ビュー</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Yusei+Magic&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/tokens.css">
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #000; overflow: hidden;
+    font-family: var(--font-brand);
+  }
+  #stage-fit {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #stage-fit > .scaler {
+    width: 1080px; height: 1920px;
+    transform-origin: center center;
+  }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="src/components.jsx"></script>
+<script type="text/babel" src="src/screens.jsx"></script>
+</head>
+<body>
+<div id="stage-fit"><div class="scaler"><div id="root"></div></div></div>
+
+<script type="text/babel">
+// Scale .scaler (1080×1920) to fit viewport; black letterbox if needed.
+function fit() {
+  const el = document.querySelector('#stage-fit > .scaler');
+  if (!el) return;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const s = Math.min(vw / 1080, vh / 1920);
+  el.style.transform = `scale(${s})`;
+}
+window.addEventListener('resize', fit);
+requestAnimationFrame(fit);
+
+function App() {
+  const [lang, setLang] = React.useState('jp');
+  const [step, setStep] = React.useState(0);
+  const [info, setInfo] = React.useState({ gender: 'men', age: 28, height: 172 });
+  const [product, setProduct] = React.useState(null);
+
+  React.useEffect(() => { fit(); });
+
+  const screens = [
+    <TopScreen key="top" lang={lang} setLang={setLang} onStart={() => setStep(1)} />,
+    <TermsScreen key="terms" lang={lang} setLang={setLang} onBack={() => setStep(0)} onAgree={() => setStep(2)} />,
+    <InfoScreen key="info" lang={lang} setLang={setLang} info={info} setInfo={setInfo} onBack={() => setStep(1)} onNext={() => setStep(3)} />,
+    <ResultScreen key="res" lang={lang} setLang={setLang} onBack={() => setStep(2)} onProduct={setProduct} onRestart={() => setStep(0)} />,
+  ];
+
+  return (
+    <div style={{ position: 'relative', width: 1080, height: 1920 }}>
+      {screens[step]}
+      {product && <ProductModal lang={lang} product={product} onClose={() => setProduct(null)} />}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

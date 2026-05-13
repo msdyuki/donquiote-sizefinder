@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>ドン・キホーテ インバウンド採寸サイネージ — デザイン比較</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Yusei+Magic&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/tokens.css">
+
+<meta name="ext-resource-dependency" content="assets/tees/manekineko-front-a.png" data-resource-id="tee_manekineko_a" />
+<meta name="ext-resource-dependency" content="assets/tees/manekineko-front-b.png" data-resource-id="tee_manekineko_b" />
+<meta name="ext-resource-dependency" content="assets/tees/japan-front-a.png" data-resource-id="tee_japan_a" />
+<meta name="ext-resource-dependency" content="assets/tees/japan-front-b.png" data-resource-id="tee_japan_b" />
+<meta name="ext-resource-dependency" content="assets/tees/matcha-front-a.png" data-resource-id="tee_matcha_a" />
+<meta name="ext-resource-dependency" content="assets/tees/matcha-front-b.png" data-resource-id="tee_matcha_b" />
+<meta name="ext-resource-dependency" content="assets/tees/matsuri-front-a.png" data-resource-id="tee_matsuri_a" />
+<meta name="ext-resource-dependency" content="assets/tees/matsuri-front-b.png" data-resource-id="tee_matsuri_b" />
+<meta name="ext-resource-dependency" content="assets/tees/sakura-front-a.png" data-resource-id="tee_sakura_a" />
+<meta name="ext-resource-dependency" content="assets/tees/sakura-front-b.png" data-resource-id="tee_sakura_b" />
+<meta name="ext-resource-dependency" content="assets/tees/sumo-front-a.png" data-resource-id="tee_sumo_a" />
+<meta name="ext-resource-dependency" content="assets/tees/sumo-front-b.png" data-resource-id="tee_sumo_b" />
+<meta name="ext-resource-dependency" content="assets/tees/bonsai-front-a.png" data-resource-id="tee_bonsai_a" />
+<meta name="ext-resource-dependency" content="assets/tees/bonsai-front-b.png" data-resource-id="tee_bonsai_b" />
+<meta name="ext-resource-dependency" content="assets/tees/gyoza-front-a.png" data-resource-id="tee_gyoza_a" />
+<meta name="ext-resource-dependency" content="assets/tees/gyoza-front-b.png" data-resource-id="tee_gyoza_b" />
+<style>
+  html, body { margin: 0; padding: 0; font-family: var(--font-brand); background: #f0eee9; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="src/components.jsx"></script>
+<script type="text/babel" src="src/screens.bundle.jsx"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#FFD700">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#FFD700"/>
+    <g transform="translate(600 400)">
+      <rect x="-200" y="-160" width="400" height="320" rx="40" fill="#000"/>
+      <text x="0" y="-30" font-family="sans-serif" font-weight="900" font-size="84" text-anchor="middle" fill="#FFD700">DON</text>
+      <text x="0" y="60" font-family="sans-serif" font-weight="900" font-size="84" text-anchor="middle" fill="#FFD700">QUIJOTE</text>
+      <text x="0" y="220" font-family="sans-serif" font-weight="700" font-size="34" text-anchor="middle" fill="#000">SIZE FINDER</text>
+    </g>
+  </svg>
+</template>
+
+<div id="root"></div>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "intensity": "standard",
+  "font": "noto",
+  "lang": "jp"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tw, setTw] = useTweaks(TWEAK_DEFAULTS);
+  const [lang, setLang] = React.useState(tw.lang);
+  React.useEffect(() => { setLang(tw.lang); }, [tw.lang]);
+
+  // Interactive flow state (for the focused-mode prototype flow)
+  const [flowStep, setFlowStep] = React.useState(0);
+  const [info, setInfo] = React.useState({ gender: 'men', age: 28, height: 172, weight: 65 });
+  const [product, setProduct] = React.useState(null);
+
+  const stageClass = [
+    'donki-stage',
+    tw.font === 'pop' ? 'pop-font' : '',
+  ].filter(Boolean).join(' ');
+
+  // Apply tweak via data-attr on every .donki-stage
+  React.useEffect(() => {
+    document.querySelectorAll('.donki-stage').forEach(el => {
+      el.setAttribute('data-intensity',
+        tw.intensity === 'loud' ? 'loud' : tw.intensity === 'calm' ? 'calm' : 'standard');
+      if (tw.font === 'pop') el.classList.add('pop-font');
+      else el.classList.remove('pop-font');
+    });
+  }, [tw.intensity, tw.font]);
+
+  const onStart = () => setFlowStep(1);
+  const flowScreens = [
+    <TopScreen key="top" lang={lang} setLang={setLang} onStart={() => setFlowStep(1)} />,
+    <TermsScreen key="terms" lang={lang} setLang={setLang} onBack={() => setFlowStep(0)} onAgree={() => setFlowStep(2)} />,
+    <InfoScreen key="info" lang={lang} setLang={setLang} onBack={() => setFlowStep(1)} onNext={() => setFlowStep(3)} info={info} setInfo={setInfo} />,
+    <ResultScreen key="res" lang={lang} setLang={setLang} onBack={() => setFlowStep(2)} onProduct={setProduct} onRestart={() => setFlowStep(0)} />,
+  ];
+
+  return (
+    <>
+      <TweaksPanel title="Tweaks — Donki Signage">
+        <TweakSection title="ブランドカラー強度">
+          <TweakRadio name="intensity" value={tw.intensity}
+            onChange={v => setTw({ intensity: v })}
+            options={[
+              { value: 'loud', label: '激しい (Loud)' },
+              { value: 'standard', label: '標準 (Standard)' },
+              { value: 'calm', label: '抑えめ (Calm)' },
+            ]} />
+        </TweakSection>
+        <TweakSection title="フォント">
+          <TweakRadio name="font" value={tw.font}
+            onChange={v => setTw({ font: v })}
+            options={[
+              { value: 'noto', label: 'Noto Sans JP' },
+              { value: 'pop', label: '手書き風POP (Yusei Magic)' },
+            ]} />
+        </TweakSection>
+        <TweakSection title="表示言語">
+          <TweakSelect value={tw.lang} onChange={v => setTw({ lang: v })}
+            options={[
+              { value: 'jp', label: '日本語 Japanese' },
+              { value: 'en', label: 'English' },
+              { value: 'zh', label: '简体中文' },
+              { value: 'ko', label: '한국어' },
+            ]} />
+        </TweakSection>
+      </TweaksPanel>
+
+      <DesignCanvas>
+        <DCSection id="flow" title="デザインスコープ" subtitle="TOP → 利用規約 → 情報入力 → 採寸結果（商品）→ 採寸結果（ボディ）→ 商品詳細。待ち受け画面と採寸撮影画面はスコープ外。">
+          <DCArtboard id="top" label="01 · TOP（多言語+スタート）" width={1080} height={1920}>
+            <div data-screen-label="01 TOP">
+              <TopScreen lang={lang} setLang={setLang} onStart={() => {}} />
+            </div>
+          </DCArtboard>
+          <DCArtboard id="terms" label="02 · 利用規約" width={1080} height={1920}>
+            <div data-screen-label="02 Terms">
+              <TermsScreen lang={lang} setLang={setLang} onBack={() => {}} onAgree={() => {}} />
+            </div>
+          </DCArtboard>
+          <DCArtboard id="info" label="03 · ユーザー情報入力" width={1080} height={1920}>
+            <div data-screen-label="03 Info">
+              <InfoScreen lang={lang} setLang={setLang} info={info} setInfo={setInfo} onBack={() => {}} onNext={() => {}} />
+            </div>
+          </DCArtboard>
+          <DCArtboard id="result-products" label="04 · 採寸結果（商品一覧）" width={1080} height={1920}>
+            <div data-screen-label="04 Result — Products" style={{ position: 'relative' }}>
+              <ResultScreen lang={lang} setLang={setLang} onBack={() => {}} onProduct={setProduct} onRestart={() => {}} />
+              {product && <ProductModal lang={lang} product={product} onClose={() => setProduct(null)} />}
+            </div>
+          </DCArtboard>
+          <DCArtboard id="result-body" label="05 · 採寸結果（ボディサイズ）" width={1080} height={1920}>
+            <div data-screen-label="05 Result — Body">
+              <ResultScreenBodyDefault lang={lang} setLang={setLang} />
+            </div>
+          </DCArtboard>
+          <DCArtboard id="modal" label="06 · 商品ポップアップ" width={1080} height={1920}>
+            <div data-screen-label="06 Modal" style={{ position: 'relative' }}>
+              <ResultScreen lang={lang} setLang={setLang} onBack={() => {}} onProduct={() => {}} onRestart={() => {}} />
+              <ProductModal lang={lang}
+                product={{ id: 1, slug: 'manekineko', name: 'MANEKINEKO 招き猫 T', colors: ['生成', 'ブラック'], size: 'L', price: 2480, mat: '綿 100%', tag: 'UNISEX' }}
+                onClose={() => {}} />
+            </div>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
