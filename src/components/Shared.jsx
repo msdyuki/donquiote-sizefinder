@@ -1,4 +1,7 @@
 import React from 'react';
+import donpenImg from '../assets/donpen.png';
+import logoYellowImg from '../assets/logo_yellow.png';
+import logoBlackImg from '../assets/logo_black.png';
 
 export const STRINGS = {
   jp: {
@@ -151,7 +154,7 @@ export const FLAGS = [
 
 export function DonKen({ size = 160, hat = true, style }) {
   return (
-    <div className="donken-ph" style={{ width: size, height: size, ...style }} aria-label="Don-pen placeholder" />
+    <img src={donpenImg} alt="Donpen" style={{ width: size, height: 'auto', ...style }} />
   );
 }
 
@@ -166,14 +169,7 @@ export function SignageChrome({ lang, setLang, step, totalSteps, showLang = fals
         padding: '0 40px', zIndex: 10,
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{
-            width: 56, height: 56, borderRadius: 10,
-            background: 'var(--donki-yellow)', border: '3px solid var(--donki-white)',
-            display: 'grid', placeItems: 'center', fontWeight: 900, color: 'var(--donki-black)', fontSize: 28,
-          }}>D</div>
-          <div style={{ color: 'var(--donki-white)', fontWeight: 900, fontSize: 28, letterSpacing: '0.08em' }}>
-            DON・QUIJOTE
-          </div>
+          <img src={logoYellowImg} alt="DON・QUIJOTE" style={{ height: 44, objectFit: 'contain' }} />
           <div style={{ color: 'var(--donki-yellow)', fontWeight: 700, fontSize: 22, marginLeft: 16 }}>
             T-SHIRT SIZE FINDER
           </div>
