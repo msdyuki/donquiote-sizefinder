@@ -25,3 +25,6 @@ dist-ssr
 
 # Electron
 dist_electron
+
+# Worklogs
+docs/worklog/
