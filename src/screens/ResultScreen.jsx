@@ -1,25 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { STRINGS, FakeQR, SignageChrome, Stage, NavFooter } from '../components/Shared.jsx';
+import { QRCodeSVG } from 'qrcode.react';
+import { STRINGS, SignageChrome, Stage, NavFooter } from '../components/Shared.jsx';
+import { BODY_MEASURES, PRODUCTS } from '../data.js';
 
-const BODY_MEASURES = [
-  { label: '肩幅 / Shoulder', value: '45.2', unit: 'cm' },
-  { label: 'バスト / Chest',  value: '96.8', unit: 'cm' },
-  { label: 'ウェスト / Waist', value: '82.4', unit: 'cm' },
-  { label: '首周り / Neck',    value: '38.1', unit: 'cm' },
-  { label: '腕の長さ / Arm',   value: '58.9', unit: 'cm' },
-  { label: '着丈目安 / Length', value: '71.0', unit: 'cm' },
-];
 
-const PRODUCTS = [
-  { id: 1, slug: 'manekineko', name: 'MANEKINEKO 招き猫 T', colors: ['生成', 'ブラック'],   size: 'L', price: 2480, mat: '綿 100%', tag: 'UNISEX' },
-  { id: 2, slug: 'japan',      name: 'JAPAN 富士山 T',       colors: ['生成', 'ブラック'],   size: 'L', price: 2480, mat: '綿 100%', tag: 'UNISEX' },
-  { id: 3, slug: 'matcha',     name: 'MATCHA 抹茶 T',        colors: ['生成', 'グリーン'],   size: 'L', price: 2480, mat: '綿 100%', tag: 'UNISEX' },
-  { id: 4, slug: 'matsuri',    name: 'MATSURI 祭 T',         colors: ['ブラック', 'ワイン'], size: 'L', price: 2480, mat: '綿 100%', tag: 'UNISEX' },
-  { id: 5, slug: 'sakura',     name: 'SAKURA 花見日和 T',     colors: ['生成', 'ピンク'],     size: 'L', price: 2480, mat: '綿 100%', tag: 'UNISEX' },
-  { id: 6, slug: 'sumo',       name: 'SUMO 幕内 T',          colors: ['生成', 'ブルー'],     size: 'L', price: 2480, mat: '綿 100%', tag: 'UNISEX' },
-  { id: 7, slug: 'bonsai',     name: 'BONSAI 盆栽 JAPAN T',  colors: ['生成', 'ブラック'],   size: 'L', price: 2480, mat: '綿 100%', tag: 'UNISEX' },
-  { id: 8, slug: 'gyoza',      name: 'GYOZA 餃子 T',         colors: ['生成', 'ネイビー'],   size: 'L', price: 2480, mat: '綿 100%', tag: 'UNISEX' },
-];
 
 export function ProductModal({ lang, product, onClose }) {
   const t = STRINGS[lang] || STRINGS.jp;
@@ -316,7 +300,10 @@ export default function ResultScreen({ lang, setLang, onBack, onProduct, onResta
         display: 'flex', alignItems: 'center', gap: 20,
       }}>
         <div style={{ background: '#fff', padding: 6, borderRadius: 6 }}>
-          <FakeQR size={110} seed={42} />
+          <QRCodeSVG 
+            value={`https://donki-sizefinder.demo/lp.html?size=L&lang=${lang}&gender=men&age=20代&height=170&weight=65`} 
+            size={110} 
+          />
         </div>
         <div>
           <div style={{ fontWeight: 900, fontSize: 28 }}>{t.saveQr}</div>

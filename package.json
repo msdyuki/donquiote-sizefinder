@@ -7,7 +7,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build:signage": "vite build -c vite.config.js",
+    "build:lp": "vite build -c vite.lp.config.js",
+    "build": "npm run build:signage && npm run build:lp",
     "preview": "vite preview"
   },
   "keywords": [],
@@ -15,6 +17,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "qrcode.react": "^4.2.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },
